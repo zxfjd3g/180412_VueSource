@@ -17,7 +17,6 @@
 </div>
 
 
-
 <!--
 1. [].slice.call(lis): 将伪数组转换为真数组
 2. node.nodeType: 得到节点类型
@@ -28,27 +27,80 @@
 -->
 
 <script type="text/javascript">
-    //1. [].slice.call(lis): 将伪数组转换为真数组
-    const lis = document.getElementsByTagName('li') // lis伪数组(有length和数字下标属性的对象)
-    console.log(lis instanceof Array, lis.forEach)  // false   undefined
-    const lis2 = Array.from(lis)  // es6
-    Array.prototype.slice2 = function (start, end) {
-      const arr = []
-      for (var i = start; i < end; i++) {
-        arr.push(this[i])
-      }
-      return arr
+  //1. [].slice.call(lis): 将伪数组转换为真数组
+  const lis = document.getElementsByTagName('li') // lis伪数组(有length和数字下标属性的对象)
+  console.log(lis instanceof Array, lis.forEach)  // false   undefined
+  const lis2 = Array.from(lis)  // es6
+  Array.prototype.slice2 = function (start, end) {
+    const arr = []
+    for (var i = start; i < end; i++) {
+      arr.push(this[i])
     }
-    const lis3 = Array.prototype.slice.call(lis)   // lis.slice()
-    console.log(lis3 instanceof Array, lis3.forEach)
+    return arr
+  }
+  const lis3 = Array.prototype.slice.call(lis)   // lis.slice()
+  console.log(lis3 instanceof Array, lis3.forEach)
 
+  //2. node.nodeType: 得到节点类型
+  // <div id="test">尚硅谷IT教育</div>
+  const elementNode = document.getElementById('test')
+  const attrNode = elementNode.getAttributeNode('id')
+  const textNode = elementNode.firstChild
+  console.log(elementNode.nodeType, attrNode.nodeType, textNode.nodeType)  // 1 2 3
 
+  //3. Object.defineProperty(obj, propertyName, {}): 给对象添加属性(指定描述符)
+  const obj = {
+    firstName: 'A',
+    lastName: 'B'
+  }
+  Object.defineProperty(obj, 'fullName', { // 属性描述符
+    configurable: true, // 是否可以重新define
+    enumerable: false, // 是否可以枚举(for..in / keys())
+    // value: 'A-B', // 指定初始值
+    // writable: true, // value是否可以修改
+    get() { // 回调函数, 用来得到当前属性值
+      return this.firstName + '-' + this.lastName
+    },
+    set(value) {// 回调函数, 用于监视当前属性值的变化
+      const names = value.split('-')
+      this.firstName = names[0]
+      this.lastName = names[1]
+    }
+  })
+  //4. Object.keys(obj): 得到对象自身可枚举属性组成的数组
+  const names = Object.keys(obj)
+  console.log(names)
+  //5. obj.hasOwnProperty(prop): 判断prop是否是obj自身的属性
+  console.log(obj.hasOwnProperty('fullName'))  // true
+  console.log(obj.hasOwnProperty('toString'), obj.toString)  // false
+  //6. DocumentFragment: 文档碎片(高效批量更新多个节点)
+  /*
+  <div id="demo">
+    <ul>
+      <li>test1</li>
+      <li>test2</li>
+      <li>test3</li>
+    </ul>
+  </div>
+   */
+  // 创建一个内存中节点容器
+  const fragment = document.createDocumentFragment()
+  const div = document.getElementById('demo')
+  let child
 
-    //2. node.nodeType: 得到节点类型
-    //3. Object.defineProperty(obj, propertyName, {}): 给对象添加属性(指定描述符)
-    //4. Object.keys(obj): 得到对象自身可枚举属性组成的数组
-    //5. obj.hasOwnProperty(prop): 判断prop是否是obj自身的属性
-    //6. DocumentFragment: 文档碎片(高效批量更新多个节点)
+  while(child=div.firstChild) { // 一个节点只能有一个父节点
+//    debugger
+    fragment.appendChild(child) // 先从页面div中移除, 再添加到fragment
+  }
+
+  // 在内存中fragment中的子节点进行处理
+  [].slice.call(fragment.childNodes[1].children).forEach(li => {
+    li.textContent = 'atguigu' // 不会更新界面
+  })
+
+  // 将fragment添加到div中
+  div.appendChild(fragment) // 批量更新
+
 </script>
 </body>
 </html>
