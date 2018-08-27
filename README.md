@@ -1,5 +1,5 @@
 ## 1. 准备
-	1.[].slice.call(lis): 将伪数组转换为真数组
+	1.Array.prototype.slice.call(lis): 将伪数组转换为真数组
 	2.node.nodeType: 得到节点类型
 	3.Object.defineProperty(obj, propertyName, {}): 给对象添加/修改属性(指定描述符)
 		configurable: true/false  是否可以重新define
@@ -12,14 +12,13 @@
   	5.DocumentFragment: 文档碎片(高效批量更新多个节点)
   	6.obj.hasOwnProperty(prop): 判断prop是否是obj自身的属性
   	
-  	
 ## debug调试
     1. debug调试的作用
       a. 调试bug: 缩小可疑代码的范围
       b. 分析程序运行流程(用来熟悉公司的项目代码)
     2. 如何调试
       a. 添加断点
-      b. 运行进入debug模块(程序悬停在某个断点处)
+      b. 运行进入debug模式(程序悬停在某个断点处)
       c. 进行各种调试操作
     3. 加断点的时机/方式
       a. 在程序运行前: debugger语句(程序打包运行的)
