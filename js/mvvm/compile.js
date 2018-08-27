@@ -32,7 +32,7 @@ Compile.prototype = {
 
         [].slice.call(childNodes).forEach(function(node) {
             var text = node.textContent;
-            var reg = /\{\{(.*)\}\}/;
+            var reg = /\{\{(.*)\}\}/;   // {{name}}
 
             if (me.isElementNode(node)) {
                 me.compile(node);
