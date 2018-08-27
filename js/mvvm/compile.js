@@ -79,8 +79,9 @@ Compile.prototype = {
         if (me.isEventDirective(dir)) {
           // 编译事件指令
           compileUtil.eventHandler(node, me.$vm, exp, dir);
-        // 普通指令
+        // 如果普通指令
         } else {
+          // 通过编译工具对象编译普通指令
           compileUtil[dir] && compileUtil[dir](node, me.$vm, exp);
         }
         // 移除指令属性
@@ -217,12 +218,10 @@ var updater = {
 
   // 更新节点的className属性
   classUpdater: function (node, value, oldValue) {
+    // 得到静态类名
     var className = node.className;
-    className = className.replace(oldValue, '').replace(/\s$/, '');
-
-    var space = className && String(value) ? ' ' : '';
-
-    node.className = className + space + value;
+    // 将合并后的类名设置给className属性上
+    node.className = (className ? className+' ' : '')  + value;
   },
 
   // 更新节点的value属性
