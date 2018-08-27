@@ -127,17 +127,22 @@ var compileUtil = {
 
   // 解析 v-model
   model: function (node, vm, exp) {
+    // 节点的初始化更新, 并创建对应的Watcher
     this.bind(node, vm, exp, 'model');
 
     var me = this,
+      // 得到表达式的值
       val = this._getVMVal(vm, exp);
+    // 给节点绑定input事件监听(输入框的值有变化时)
     node.addEventListener('input', function (e) {
+      // 得到输入框最新的值
       var newValue = e.target.value;
       if (val === newValue) {
         return;
       }
-
+      // 将最新值设置给表达式对应的属性的值-->触发数据绑定变化的流程
       me._setVMVal(vm, exp, newValue);
+      // 保存最新的值
       val = newValue;
     });
   },
@@ -161,7 +166,9 @@ var compileUtil = {
     // 如果函数存在, 执行函数更新节点(指定节点对象, 更新为什么值)
     updaterFn && updaterFn(node, this._getVMVal(vm, exp));
 
+    // 为表达式创建对应的watcher--> 用于更新节点
     new Watcher(vm, exp, function (value, oldValue) {
+      // 更新节点
       updaterFn && updaterFn(node, value, oldValue);
     });
   },
